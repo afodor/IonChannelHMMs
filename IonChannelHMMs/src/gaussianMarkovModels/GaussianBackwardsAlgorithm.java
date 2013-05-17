@@ -1,5 +1,8 @@
 package gaussianMarkovModels;
 
+/*
+ * 
+ */
 public class GaussianBackwardsAlgorithm
 {
 	private final double[][] logProbs;
