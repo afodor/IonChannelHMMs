@@ -1,0 +1,1 @@
+MARKOV_CHAIN_OUT_DIR=D:\\simDir
