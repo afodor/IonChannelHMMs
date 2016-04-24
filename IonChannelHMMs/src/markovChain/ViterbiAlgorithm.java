@@ -1,5 +1,7 @@
 package markovChain;
 
+import java.text.NumberFormat;
+
 public class ViterbiAlgorithm
 {
 	// the first index corresponds to state (k)
@@ -108,5 +110,24 @@ public class ViterbiAlgorithm
 				return x;
 		
 		throw new Exception("Could not find " + emission);
+	}
+	
+	public static void main(String[] args) throws Exception
+	{
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(5);
+		
+		MarkovModel model = new DishonestCasinoModel();
+		String[] emissions = {"3", "2", "6", "6", "6", "6","6"};
+		ViterbiAlgorithm va = new ViterbiAlgorithm(model, emissions);
+		double[][] logProbs = va.getLogProbs();
+		String[] piStar = va.getPiStar();
+		
+		for( int x=0; x < emissions.length; x++)
+		{
+			System.out.println( emissions[x] + "\t" + 
+					nf.format( Math.exp( logProbs[0][x])) 
+								+ "\t" + nf.format( Math.exp( logProbs[1][x])) + "\t" + piStar[x] );
+		}
 	}
 }

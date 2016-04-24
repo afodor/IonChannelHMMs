@@ -116,4 +116,56 @@ public class ForwardAlgorithm
 				logProbs[x][0] = Math.log( 0);
 		}
 	}
+	
+	/*
+	public static void main(String[] args) throws Exception
+	{
+		float numTrials = 1000000;
+		MarkovModel model = new BoundedDishonestCasino();
+		
+		float numFairMatch = 0;
+		float numLoadedMatch = 0;
+		for( int x=0; x< numTrials ; x++)
+		{
+			MarkovChainLink[] links = 
+				GenerateMarkovChainFromModel.generateMarkovChainFromBoundedModel(model);
+			
+			if( links.length >= 2 &&
+					links[0].getEmission().equals("3") && 
+						links[1].getEmission().equals("2") )
+			{
+				if( links[0].getMarkovState().getStateName().equals("F") ) 
+					numFairMatch++;
+				else 
+					numLoadedMatch++;
+			}
+				
+			if( x %1000 == 0 )
+				System.out.println( x + " " + 
+						(numFairMatch/x) + " " + (numLoadedMatch/x));
+		}	
+	}*/
+	
+	public static void main(String[] args) throws Exception
+	{
+		MarkovModel model = new BoundedDishonestCasino();
+		
+		String[] emissions = {"3","2", "6" };
+		ForwardAlgorithm fa = new ForwardAlgorithm(model, emissions);
+		
+		for( int x=0; x < emissions.length; x++)
+		{
+			System.out.print( emissions[ x ] );
+			
+			for(int y=0; y < model.getMarkovStates().length; y++)
+			{
+				System.out.print(" " + Math.exp( fa.getLogProbs()[y][x]));
+			}
+			
+			System.out.println();
+		}
+		
+		//System.out.println(fa.getLogFinalPValue());
+		System.out.println( Math.exp( fa.getLogFinalPValue()));
+	}
 }
