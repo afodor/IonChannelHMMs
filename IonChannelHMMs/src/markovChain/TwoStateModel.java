@@ -113,7 +113,7 @@ public class TwoStateModel extends MarkovModel
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("c:\\temp\\guess.txt")));
 		
 		writer.write("iteration\temission\tforwardfair\tforwardloaded\tbackwardsfair\tbackwardsloaded\t"
-				+ "posteriorForH\tposteriorForT\n");
+				+ "posteriorForHFair\tposteriorForTFair\tposteriorForHLoaded\tposteriorForTLoaded\n");
 		
 		TwoStateModelInitialGuess guess = new TwoStateModelInitialGuess();
 		
@@ -136,7 +136,7 @@ public class TwoStateModel extends MarkovModel
 		
 			if(emissions[i]== "H")
 			{
-				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
 				writer.write( val + "\t" );
 			}
 			else
@@ -146,7 +146,28 @@ public class TwoStateModel extends MarkovModel
 			
 			if(emissions[i]== "T")
 			{
-				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				writer.write( val + "\t" );
+			}
+			else
+			{
+				writer.write("0\t");
+			}
+			
+
+			if(emissions[i]== "H")
+			{
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) /sum;
+				writer.write( val + "\t" );
+			}
+			else
+			{
+				writer.write("0\t");
+			}
+			
+			if(emissions[i]== "T")
+			{
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) /sum;
 				writer.write( val + "\n" );
 			}
 			else
