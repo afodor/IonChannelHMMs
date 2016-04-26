@@ -1,5 +1,9 @@
 package markovChain;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 public class TwoStateModel extends MarkovModel
 {
 	private static final String[] FLIPS = { "H", "T"};
@@ -90,7 +94,7 @@ public class TwoStateModel extends MarkovModel
 	
 	public static void main(String[] args) throws Exception
 	{
-		int numInterations = 1000;
+		int numInterations = 20;
 		
 		TwoStateModel tsm = new TwoStateModel();
 		MarkovChainLink[] chain = 
@@ -105,8 +109,25 @@ public class TwoStateModel extends MarkovModel
 			emissions[x] = mcl.getEmission();
 			x++;
 		}
-			
-		ForwardAlgorithm fa = new ForwardAlgorithm(tsm, emissions);
-		BackwardsAlgorithm ba = new BackwardsAlgorithm(tsm, emissions);
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("c:\\temp\\guess.txt")));
+		
+		writer.write("iteration\temission\tforwardfair\tforwardloaded\tbackwardsfair\tbackwardsloaded\n");
+		
+		TwoStateModelInitialGuess guess = new TwoStateModelInitialGuess();
+		
+		ForwardAlgorithm fa = new ForwardAlgorithm(guess, emissions);
+		BackwardsAlgorithm ba = new BackwardsAlgorithm(guess, emissions);
+		
+		for( int i=0; i < numInterations; i++)
+		{
+			writer.write(i + "\t" + emissions[i] + "\t" + Math.exp(fa.getLogProbs()[0][i]) + "\t" + 
+					Math.exp(fa.getLogProbs()[1][i]) + "\t" +
+					Math.exp(ba.getLogProbs()[0][i]) + "\t" + 
+					 		Math.exp(ba.getLogProbs()[1][i]) + "\n"
+		);	
+		}
+		
+		writer.flush();  writer.close();
 	}
 }
