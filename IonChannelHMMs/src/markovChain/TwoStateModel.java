@@ -127,7 +127,8 @@ public class TwoStateModel extends MarkovModel
 					 		Math.exp(ba.getLogProbs()[1][i]) + "\n"
 		);	
 		}
-		
+		System.out.println();
+		System.out.println(Math.exp(ba.getLogFinalPValue()));
 		writer.flush();  writer.close();
 	}
 }
