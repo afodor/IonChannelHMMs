@@ -1,4 +1,4 @@
 # Note that if you are running the compiled code in the bin directory
 # that property file will get picked up instead of this one
 # edit that one instead!!
-MARKOV_CHAIN_OUT_DIR=D:\\simDir
+MARKOV_CHAIN_OUT_DIR=c:\\temp

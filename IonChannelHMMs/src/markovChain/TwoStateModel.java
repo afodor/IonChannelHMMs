@@ -17,7 +17,7 @@ public class TwoStateModel extends MarkovModel
 	@Override
 	public float[] getTransitionProbsFromInitialSilentState()
 	{
-		float[] f =  { 0.001f, 0.001f };	
+		float[] f =  { 1, 0};	
 		return f;
 	}
 	
@@ -31,7 +31,7 @@ public class TwoStateModel extends MarkovModel
 	private static class FairCoin implements MarkovState
 	{
 
-		private final static double[] EMISSION_DIST = {0.5, 0.5};
+		private final static double[] EMISSION_DIST = {0.05, 0.95};
 		private final static double[] TRANSITION_DIST = {0.9, 0.1};
 		
 		@Override
@@ -112,20 +112,47 @@ public class TwoStateModel extends MarkovModel
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File("c:\\temp\\guess.txt")));
 		
-		writer.write("iteration\temission\tforwardfair\tforwardloaded\tbackwardsfair\tbackwardsloaded\n");
+		writer.write("iteration\temission\tforwardfair\tforwardloaded\tbackwardsfair\tbackwardsloaded\t"
+				+ "posteriorForH\tposteriorForT\n");
 		
 		TwoStateModelInitialGuess guess = new TwoStateModelInitialGuess();
 		
 		ForwardAlgorithm fa = new ForwardAlgorithm(guess, emissions);
 		BackwardsAlgorithm ba = new BackwardsAlgorithm(guess, emissions);
 		
+		double sum =0;
+		
+		for( int i=0; i < numInterations; i++)
+		{
+			sum += Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]); 
+		}
+		
 		for( int i=0; i < numInterations; i++)
 		{
 			writer.write(i + "\t" + emissions[i] + "\t" + Math.exp(fa.getLogProbs()[0][i]) + "\t" + 
 					Math.exp(fa.getLogProbs()[1][i]) + "\t" +
 					Math.exp(ba.getLogProbs()[0][i]) + "\t" + 
-					 		Math.exp(ba.getLogProbs()[1][i]) + "\n"
-		);	
+					 		Math.exp(ba.getLogProbs()[1][i]) + "\t");
+		
+			if(emissions[i]== "H")
+			{
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				writer.write( val + "\t" );
+			}
+			else
+			{
+				writer.write("0\t");
+			}
+			
+			if(emissions[i]== "T")
+			{
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				writer.write( val + "\n" );
+			}
+			else
+			{
+				writer.write("0\n");
+			}
 		}
 		System.out.println();
 		System.out.println(Math.exp(ba.getLogFinalPValue()));
