@@ -120,11 +120,13 @@ public class TwoStateModel extends MarkovModel
 		ForwardAlgorithm fa = new ForwardAlgorithm(guess, emissions);
 		BackwardsAlgorithm ba = new BackwardsAlgorithm(guess, emissions);
 		
-		double sum =0;
+		double sumZero =0;
+		double sumOne = 0;
 		
 		for( int i=0; i < numInterations; i++)
 		{
-			sum += Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[0][i]); 
+			sumZero += Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]); 
+			sumOne +=  Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]); 
 		}
 		
 		for( int i=0; i < numInterations; i++)
@@ -136,7 +138,8 @@ public class TwoStateModel extends MarkovModel
 		
 			if(emissions[i]== "H")
 			{
-				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) 
+						/sumZero;
 				writer.write( val + "\t" );
 			}
 			else
@@ -146,7 +149,8 @@ public class TwoStateModel extends MarkovModel
 			
 			if(emissions[i]== "T")
 			{
-				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[0][i]) * Math.exp(ba.getLogProbs()[0][i]) 
+						/sumZero;
 				writer.write( val + "\t" );
 			}
 			else
@@ -157,7 +161,8 @@ public class TwoStateModel extends MarkovModel
 
 			if(emissions[i]== "H")
 			{
-				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) 
+						/sumOne;
 				writer.write( val + "\t" );
 			}
 			else
@@ -167,7 +172,8 @@ public class TwoStateModel extends MarkovModel
 			
 			if(emissions[i]== "T")
 			{
-				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) /sum;
+				double val = Math.exp(fa.getLogProbs()[1][i]) * Math.exp(ba.getLogProbs()[1][i]) 
+						/sumOne;
 				writer.write( val + "\n" );
 			}
 			else
