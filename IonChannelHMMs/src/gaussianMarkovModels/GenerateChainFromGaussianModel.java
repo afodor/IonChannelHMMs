@@ -139,7 +139,8 @@ public class GenerateChainFromGaussianModel
 					new File(ConfigReader.getMarkovChainOutDir() +  File.separator +
 							model.getModelName() + "_GaussianPosteriorProbs.txt")));
 			
-			writer.write("iteration\temission\ttrueState");
+			writer.write("iteration\t" 
+					+ "emission\ttrueState\tforwardOpen\treverseOpen\tforwardClosed\treverseClosed");
 			
 			for( int x=0; x < model.getMarkovStates().length; x++)
 				writer.write("\tPosteriorProbeState" + model.getMarkovStates()[x].getStateName());
@@ -152,10 +153,14 @@ public class GenerateChainFromGaussianModel
 			{
 				writer.write( (x+1) + "\t" );
 				writer.write(emissions[x] + "\t");
-				writer.write(markovChain[x].getMarkovState().getStateName());
+				writer.write(markovChain[x].getMarkovState().getStateName() + "\t");
+
+				writer.write(fa.getLogProbs()[0][x] + "\t" + ba.getLogProbs()[0][x] + "\t");
+				writer.write(fa.getLogProbs()[1][x] + "\t" + ba.getLogProbs()[1][x] );
+			
 				
 				for( int y=0; y < model.getMarkovStates().length; y++)
-				{
+				{	
 					double fTimesB = fa.getLogProbs()[y][x] + ba.getLogProbs()[y][x];
 					double stateProb = Math.exp(fTimesB - fullLogPx);
 					writer.write("\t" + stateProb);

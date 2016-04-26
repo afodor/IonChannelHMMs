@@ -49,7 +49,7 @@ public class TwoStateIonChannel extends GaussianMarkovModel
 	
 	private static class OpenState implements GaussianMarkovState
 	{
-		double meanEmission = 20;
+		double meanEmission = .5;
 		double sdEmission = .5;
 		
 		@Override
